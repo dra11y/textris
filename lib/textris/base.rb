@@ -75,7 +75,7 @@ module Textris
       class_name  = self.class.to_s.underscore.sub('texter/', '')
       action_name = @action
 
-      "#{class_name}/#{action_name}"
+      "textris/#{class_name}/#{action_name}"
     end
 
     def set_instance_variables_for_rendering
