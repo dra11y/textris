@@ -38,7 +38,8 @@ module Textris
     end
 
     def call_action
-      send(@action, *@args)
+      kwargs = @args.extract_options!
+      send(@action, *@args, **kwargs)
     end
 
     def render_content
