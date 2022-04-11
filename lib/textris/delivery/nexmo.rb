@@ -1,22 +1,24 @@
-module Textris
-  module Delivery
-    class Nexmo < Textris::Delivery::Base
-      def deliver(phone)
-        client.sms.send(
-          from: sender_id,
-          to:   phone,
-          text: message.content
-        )
-      end
+# module Textris
+#   module Delivery
+#     class Nexmo < Textris::Delivery::Base
+#       def deliver(phone)
+#         client.sms.send(
+#           from: sender_id,
+#           to:   phone,
+#           text: message.content
+#         )
+#       end
 
-      private
-        def client
-          @client ||= ::Nexmo::Client.new(api_key: Rails.application.credentials.nexmo[:api_key], api_secret: Rails.application.credentials.nexmo[:api_secret])
-        end
+#       private
+#         def client
+#           x = {api_key: Rails.application.credentials.nexmo[:api_key], api_secret: Rails.application.credentials.nexmo[:api_secret]}
+#           raise x.to_s
+#           @client ||= ::Vonage::Client.new(api_key: Rails.application.credentials.nexmo[:api_key], api_secret: Rails.application.credentials.nexmo[:api_secret])
+#         end
 
-        def sender_id
-          message.from_phone || message.from_name
-        end
-    end
-  end
-end
+#         def sender_id
+#           message.from_phone || message.from_name
+#         end
+#     end
+#   end
+# end

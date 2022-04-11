@@ -15,7 +15,11 @@ describe Textris::Delivery::Mail do
     Object.send(:remove_const, :Rails) if defined?(Rails)
 
     module MyAppName
-      class Application < OpenStruct; end
+      class Application < OpenStruct
+        def self.module_parent_name
+          'MyAppName'
+        end
+      end
     end
 
     Rails = OpenStruct.new(
@@ -71,7 +75,7 @@ describe Textris::Delivery::Mail do
   end
 
   it 'reads templates from configuration' do
-    Rails.application.config = OpenStruct.new(
+    ::Rails.application.config = OpenStruct.new(
       :textris_mail_from_template    => 'a',
       :textris_mail_to_template      => 'b',
       :textris_mail_subject_template => 'c',
@@ -133,15 +137,18 @@ describe Textris::Delivery::Mail do
       interpolations = %w{app env texter action from_name
         from_phone to_phone content}
 
-      Rails.env = nil
-      Rails.application = OpenStruct.new
-      Rails.application.config = OpenStruct.new(
-        :textris_mail_to_template => interpolations.map { |i| "%{#{i}}" }.join('-'))
+      Rails = OpenStruct.new(
+        application: MyAppName::Application.new(
+          config: OpenStruct.new(
+            textris_mail_to_template: interpolations.map { |i| "%{#{i}}" }.join('-'))
+        ),
+        env: nil
+      )
 
       delivery.deliver_to_all
 
       expect(FakeMail.deliveries.last[:to].split('-')).to eq([
-        'unknown', 'unknown', 'unknown', 'unknown', 'unknown', 'unknown', '48100200300', 'Some text'])
+        'MyAppName', 'unknown', 'unknown', 'unknown', 'unknown', 'unknown', '48100200300', 'Some text'])
     end
   end
 

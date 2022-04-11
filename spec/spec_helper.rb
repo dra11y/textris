@@ -5,6 +5,7 @@ require "codeclimate-test-reporter"
 require "sidekiq/testing"
 require 'textris/delay/active_job/missing'
 require 'textris/delay/sidekiq/missing'
+require 'active_support'
 require 'active_support/testing/time_helpers'
 
 CodeClimate::TestReporter.configuration.logger = Logger.new("/dev/null")
@@ -33,6 +34,8 @@ end
 require_relative '../lib/textris'
 
 RSpec.configure do |config|
+  config.filter_run_when_matching :focus
+
   config.include ActiveSupport::Testing::TimeHelpers
 
   config.expect_with :rspec do |expectations|
