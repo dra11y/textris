@@ -44,7 +44,7 @@ module Textris
     end
 
     def render_content
-      renderer = ActionController::Base.renderer.new
+      renderer = ::ActionController::Base.renderer.new
 
       renderer.render(
         template: template_name,
