@@ -23,22 +23,27 @@ module Textris
 
       private
 
-      def method_missing(method_name, *args)
-        new(method_name, *args).call_action
+      def method_missing(method_name, *args, **kwargs)
+        # if method_name.to_s == 'my_action'
+        #   raise "method_missing: #{method_name}, args: #{args}, kwargs: #{kwargs}"
+        # end
+        new(method_name, *args, **kwargs).call_action
       end
 
-      def respond_to_missing?(method, *args)
+      def respond_to_missing?(method, *args, **kwargs)
+        puts "respond_to_missing? #{public_instance_methods(true).include?(method).to_s} #{method}"
         public_instance_methods(true).include?(method) || super
       end
     end
 
-    def initialize(action, *args)
+    def initialize(action, *args, **kwargs)
       @action = action
       @args   = args
+      @kwargs = kwargs
     end
 
     def call_action
-      send(@action, *@args)
+      send(@action, *@args, **@kwargs)
     end
 
     def render_content

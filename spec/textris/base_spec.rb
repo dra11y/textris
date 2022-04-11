@@ -122,6 +122,50 @@ describe Textris::Base do
     end
   end
 
+  describe '#my_kwarg_action' do
+    before do
+      class MyTexter < Textris::Base
+        def my_kwarg_action(kwarg:)
+          kwarg[:calls] += 1
+        end
+      end
+    end
+
+    it 'calls actions on newly created instances' do
+      call_info = { :calls => 0 }
+
+      MyTexter.my_kwarg_action(kwarg: call_info)
+
+      expect(call_info[:calls]).to eq(1)
+    end
+
+    it 'responds to defined actions' do
+      expect(MyTexter.respond_to?(:my_kwarg_action)).to eq true
+    end
+  end
+
+  describe '#my_arg_and_kwargs_action' do
+    before do
+      class MyTexter < Textris::Base
+        def my_arg_and_kwargs_action(arg, kwarg:, kwarg2:)
+          kwarg[:calls] += 1
+        end
+      end
+    end
+
+    it 'calls actions on newly created instances' do
+      call_info = { :calls => 0 }
+
+      MyTexter.my_arg_and_kwargs_action(OpenStruct.new(test: 1), kwarg: call_info, kwarg2: 2)
+
+      expect(call_info[:calls]).to eq(1)
+    end
+
+    it 'responds to defined actions' do
+      expect(MyTexter.respond_to?(:my_arg_and_kwargs_action)).to eq true
+    end
+  end
+
   describe '#my_action' do
     before do
       class MyTexter < Textris::Base
