@@ -4,11 +4,11 @@ module Textris
       class Job < ::ActiveJob::Base
         queue_as :textris
 
-        def perform(texter, action, args)
+        def perform(texter, action, *args, **kwargs)
           texter = texter.safe_constantize
 
           if texter.present?
-            texter.new(action, *args).call_action.deliver_now
+            texter.new(action, *args, **kwargs).call_action.deliver_now
           end
         end
       end

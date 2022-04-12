@@ -24,14 +24,10 @@ module Textris
       private
 
       def method_missing(method_name, *args, **kwargs)
-        # if method_name.to_s == 'my_action'
-        #   raise "method_missing: #{method_name}, args: #{args}, kwargs: #{kwargs}"
-        # end
         new(method_name, *args, **kwargs).call_action
       end
 
-      def respond_to_missing?(method, *args, **kwargs)
-        puts "respond_to_missing? #{public_instance_methods(true).include?(method).to_s} #{method}"
+      def respond_to_missing?(method, *)
         public_instance_methods(true).include?(method) || super
       end
     end
@@ -68,6 +64,7 @@ module Textris
         :texter     => self.class,
         :action     => @action,
         :args       => @args,
+        :kwargs     => @kwargs,
         :content    => options[:body].is_a?(String) ? options[:body] : nil,
         :renderer   => self)
 

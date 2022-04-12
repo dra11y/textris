@@ -6,6 +6,13 @@ describe Textris::Delay::ActiveJob do
       end
     end
 
+    class MyKeywordTexter < Textris::Base
+      def delayed_action(phone:, favorite_color:)
+        @favorite_color = favorite_color
+        text :to => phone
+      end
+    end
+
     class ActiveJob::Logging::LogSubscriber
       def info(*args, &block)
       end
@@ -99,12 +106,28 @@ describe Textris::Delay::ActiveJob do
         expect(job.queue_name).to eq 'custom'
       end
 
+      it 'schedules action with proper keyword arguments' do
+        job = MyKeywordTexter.delayed_action(phone: '48111222333', favorite_color: 'green').deliver_later
+        expect(job.queue_name).to eq 'textris'
+
+        job = MyKeywordTexter.delayed_action(phone: '48111222333', favorite_color: 'blue').deliver_later(:queue => :custom)
+        expect(job.queue_name).to eq 'custom'
+      end
+
       it 'executes job properly' do
         job = Textris::Delay::ActiveJob::Job.new
 
         expect_any_instance_of(Textris::Message).to receive(:deliver_now)
 
         job.perform('MyTexter', :delayed_action, ['48111222333'])
+      end
+
+      it 'executes job with keywords properly' do
+        job = Textris::Delay::ActiveJob::Job.new
+
+        expect_any_instance_of(Textris::Message).to receive(:deliver_now)
+
+        job.perform('MyKeywordTexter', :delayed_action, phone: '48111222333', favorite_color: 'green')
       end
     end
   end

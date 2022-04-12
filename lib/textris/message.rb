@@ -1,7 +1,7 @@
 module Textris
   class Message
     attr_reader :content, :from_name, :from_phone, :to, :texter, :action, :args,
-      :media_urls, :twilio_messaging_service_sid
+      :kwargs, :media_urls, :twilio_messaging_service_sid
 
     def initialize(options = {})
       initialize_content(options)
@@ -11,6 +11,7 @@ module Textris
       @texter     = options[:texter]
       @action     = options[:action]
       @args       = options[:args]
+      @kwargs     = options[:kwargs]
       @media_urls = options[:media_urls]
     end
 

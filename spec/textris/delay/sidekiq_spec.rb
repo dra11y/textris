@@ -1,5 +1,7 @@
 describe Textris::Delay::Sidekiq do
   before do
+    Sidekiq.strict_args!
+
     class MyTexter < Textris::Base
       def delayed_action(phone, body)
         text :to => phone, :body => body
@@ -109,11 +111,9 @@ describe Textris::Delay::Sidekiq do
       it 'does not serialize wrong ActiveRecord object arrays' do
         users = [XModel.new('48666777888'), YModel.new('48666777889')]
 
-        MyTexter.delay.serialized_array_action(users)
-
         expect do
-          Textris::Delay::Sidekiq::Worker.drain
-        end.to raise_error(NoMethodError)
+          MyTexter.delay.serialized_array_action(users)
+        end.to raise_error(ArgumentError)
       end
 
       it 'does not raise when ActiveRecord not loaded' do

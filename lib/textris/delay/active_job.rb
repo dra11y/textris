@@ -8,7 +8,7 @@ module Textris
       def deliver_later(options = {})
         job = Textris::Delay::ActiveJob::Job
 
-        job.new(texter(:raw => true).to_s, action.to_s, args).enqueue(options)
+        job.new(texter(:raw => true).to_s, action.to_s, *args, **kwargs).enqueue(options)
       end
     end
   end

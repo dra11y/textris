@@ -24,7 +24,9 @@ describe Textris::Delivery::Mail do
 
     Rails = OpenStruct.new(
       :application => MyAppName::Application.new(
-        :config => OpenStruct.new
+        :config => OpenStruct.new(
+          :textris_delivery_method => :test
+        )
       ),
       :env => 'test'
     )

@@ -156,7 +156,7 @@ describe Textris::Base do
     it 'calls actions on newly created instances' do
       call_info = { :calls => 0 }
 
-      MyTexter.my_arg_and_kwargs_action(OpenStruct.new(test: 1), kwarg: call_info, kwarg2: 2)
+      MyTexter.my_arg_and_kwargs_action(1, kwarg: call_info, kwarg2: 2)
 
       expect(call_info[:calls]).to eq(1)
     end
